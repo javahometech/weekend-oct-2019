@@ -3,16 +3,16 @@
   become: True
   tasks:
     - name: Install apache
-	  yum:
-	    name: httpd
-		state: present
-	- name: Install Git
-	  yum:
-	    name: git
-		state: present
-	- name: Install static website from git
-	  git:
-	    repo: https://github.com/javahometech/javahome-app
-		dest: /var/www/html
+      yum:
+        name: httpd
+        state: present
+    - name: Install Git
+      yum:
+        name: git
+        state: present
+    - name: Install static website from git
+      git:
+        repo: https://github.com/javahometech/javahome-app
+        dest: /var/www/html
 
 ...
