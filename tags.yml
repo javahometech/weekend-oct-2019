@@ -14,15 +14,20 @@
       git:
         repo: https://github.com/javahometech/javahome-app
         dest: /var/www/html
-    - name: restart apache
-      service:
-        name: httpd
-        state: restarted
-
+      notify:
+        - Restart apache
+      tags:
+        - deploy
     - name: Start and enable apache
       service:
         name: httpd
         state: started
         enabled: yes
-
+      tags:
+        - start
+  handlers:
+    - name: Restart apache
+      service:
+        name: httpd
+        state: restarted
 ...

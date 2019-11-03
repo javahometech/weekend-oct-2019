@@ -1,0 +1,16 @@
+---
+
+- hosts: 172.31.14.132
+  become: yes
+  tasks:
+    - name: Create JavaHome group
+      group:
+        name: javahome
+        state: present
+    - name: Create users
+      user:
+        name: "{{item.name}}"
+        group: "{{item.group}}"
+      loop:
+        - {name: "hari", group: "javahome"}
+        - {name: "rakesh", group: "ec2-user"}

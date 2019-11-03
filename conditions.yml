@@ -1,0 +1,15 @@
+---
+
+- hosts: 172.31.14.132
+  become: yes
+  gather_facts: yes
+  tasks:
+    - name: Install required packages
+      yum:
+        name: "{{item}}"
+        state: present
+      loop:
+        - git
+        - docker
+        - httpd
+      when: ansible_os_family == "RedHat" and ansible_hostname == "node-2"

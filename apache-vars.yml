@@ -1,6 +1,8 @@
 ---
 - hosts: 172.31.14.132
   become: True
+  vars:
+    - apache_port: 80
   tasks:
     - name: Install apache
       yum:
@@ -14,15 +16,28 @@
       git:
         repo: https://github.com/javahometech/javahome-app
         dest: /var/www/html
-    - name: restart apache
-      service:
-        name: httpd
-        state: restarted
-
+      notify:
+        - Restart apache
+      tags:
+        - deploy
     - name: Start and enable apache
       service:
         name: httpd
         state: started
         enabled: yes
-
+      tags:
+        - start
+    - name: Change default port
+      lineinfile:
+        path: /etc/httpd/conf/httpd.conf
+        regexp: '^Listen '
+        insertafter: '^#Listen '
+        line: Listen "{{apache_port}}"
+      notify:
+        - Restart apache
+  handlers:
+    - name: Restart apache
+      service:
+        name: httpd
+        state: restarted
 ...

@@ -1,0 +1,40 @@
+---
+
+- hosts: mysql
+  become: yes
+  tasks:
+    - name: Install python mysql-db
+      apt:
+        name: PyMySQL
+        state: present
+        update_cache: yes
+    - name: Install mysql server
+      apt:
+        name: mysql-server
+        state: present
+    - name: start and enable
+      service:
+        name: mysql
+        state: started
+        enabled: yes
+    - name: Allow mysql to listen from anywhere
+      lineinfile:
+        dest: /etc/mysql/mysql.conf.d/mysqld.cnf
+        regexp: '^bind-address'
+        line: 'bind-address=0.0.0.0'
+      notify: restart mysql
+    - name: create mysql db
+      mysql_db:
+        name: javahome
+        state: present
+    - name: create admin user
+      mysql_user:
+        name: admin
+        password: Admin@!@#
+        priv: '*.*:ALL'
+        state: present
+  handlers:
+    - name: restart mysql
+      service:
+        name: mysql
+        state: restarted
