@@ -14,5 +14,10 @@
       git:
         repo: https://github.com/javahometech/javahome-app
         dest: /var/www/html
+    - name: Start and enable apache
+      service:
+        name: httpd
+        state: present
+        enabled: yes
 
 ...
